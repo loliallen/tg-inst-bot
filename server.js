@@ -18,6 +18,9 @@ const app = express()
 
 //   }
 // ));
+app.get('/', (req, res) => {
+    res.send("hello")
+})
 app.get('/policy', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'))
 })
