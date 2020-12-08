@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  bot:
+    image: noisy-bot
+    build: ./
+    depends_on:
+      - mongo
+    environment: 
+      - USER=loli.allen
+      - PASSWORD=12evr4rqbqewbh9
+      - TELEGRAM_BOT_TOKEN=1471670852:AAGHkW_u_84U5Zf_hvyMepxheAhkbf5KL6U
+      - MONGODB_URI=mongodb://mongo:27017/noisy-bot
+      - TZ=Europe/Moscow
+
+  mongo:
+    image: mongo:latest
+    volumes: 
+      - mongo_volume:/data/db
+    restart: always
+    ports: 
+      - 27017:27017
+
+networks:
+  bot-app:
+    driver: bridge
+
+
+volumes: 
+  mongo_volume:

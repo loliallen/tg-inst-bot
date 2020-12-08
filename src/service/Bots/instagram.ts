@@ -17,19 +17,22 @@ export default class InstagramBot {
     }
 
     async isFollowed(account_name:string){
-        const id = await this.ig.user.getIdByUsername(account_name)
-        const followers = await this.ig.feed.accountFollowing(id).items()
-        const account = followers.findIndex(e => e.pk === 4557096531)
-        return account
+        try {
+            const id = await this.ig.user.getIdByUsername(account_name)
+            const followers = await this.ig.feed.accountFollowing(id).items()
+            const account = followers.findIndex(e => e.pk === 4557096531)
+            return account
+        } catch (error) {
+            return -1
+        }
     }
 
     async login() {
+        console.log("[Instagram Bot]: Login...")
         this.ig.state.generateDevice(this.user);
         await this.ig.simulate.preLoginFlow();
         const loggedInAccount = await this.ig.account.login(this.user, this.password);
         this.id = loggedInAccount.pk
         await this.ig.simulate.postLoginFlow();
-        console.log('logged in..');
-        console.log(loggedInAccount.full_name)
     }
 }
