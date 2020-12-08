@@ -6,12 +6,8 @@ services:
     build: ./
     depends_on:
       - mongo
-    environment: 
-      - USER=loli.allen
-      - PASSWORD=12evr4rqbqewbh9
-      - TELEGRAM_BOT_TOKEN=1414101980:AAFa4NoAlqxvxcMaE4VkarwKfZcxt6gescw
-      - STEP_ID=5fce7ebbc7be95126c18c23e
-      - MONGODB_URI=mongodb://localhost:27017/noisy-bot
+    env_file: 
+      - .env
 
   mongo:
     image: mongo:latest
