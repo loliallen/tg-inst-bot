@@ -4,6 +4,7 @@ import InstagramBot from "./instagram";
 import { isDocument } from "@typegoose/typegoose"
 import StepModel, { Step } from "../../models/StepModel";
 import path from "path"
+import fs from "fs"
 
 export default class TelegramBot {
     bot: Telebot;
@@ -89,6 +90,7 @@ export default class TelegramBot {
     private sendStep(user: User, step: Step, error: boolean = false): void {
         switch (step.attach_type) {
             case "file":
+                console.log(fs.existsSync(path.resolve(__dirname, "../../../public", step.attach_file)), { filename: "Взрывная информация по ютубу" })
                 this.bot.sendMessage(user.tg_id, step.message, { parseMode: "markdown" })
                 return this.bot.sendDocument(user.tg_id, path.resolve(__dirname, "../../../public", step.attach_file))
             default:
