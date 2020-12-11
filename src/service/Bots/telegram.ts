@@ -28,14 +28,12 @@ export default class TelegramBot {
     }
     private start() {
         this.bot.on(['/start'], async (msg) => {
-            console.log("Start Event")
             try {
                 const step = await StepModel.findById(process.env.STEP_ID)
                 const user = new UserModel({
                     tg_id: msg.from.id,
                     step: process.env.STEP_ID
                 })
-                console.log(step)
                 if (step) {
                     this.sendStep(user, step)
                     await user.save()
@@ -50,8 +48,6 @@ export default class TelegramBot {
     }
     private instLoginStep() {
         this.bot.on('text', async (msg) => {
-            console.log("Text Event")
-            console.log(msg)
             if (msg.entities && msg.entities.length > -1)
                 return
             try {
@@ -64,16 +60,13 @@ export default class TelegramBot {
                 if (!user) {
                     return this.bot.sendMessage(msg.from.id, "Опа, адажи-", { parseMode: "markdown" })
                 }
-                console.log(user)
                 // приходит логин от инсты
                 if (!user.inst_login) {
                     // проверка подписки
                     const index = await this.iBot.isFollowed(msg.text)
-                    console.log("index", index)
                     if (index > -1 && isDocument(user.step)) {
                         await user.updateOne({ $set: { inst_login: msg.text, step: user.step.next } })
                         const nextStep = user.step.next
-                        console.log("nextStep", nextStep)
                         if (isDocument(nextStep))
                             return this.sendStep(user, nextStep)
                     }
@@ -90,7 +83,6 @@ export default class TelegramBot {
     private sendStep(user: User, step: Step, error: boolean = false): void {
         switch (step.attach_type) {
             case "file":
-                console.log(fs.existsSync(path.resolve(__dirname, "../../../public", step.attach_file)), { filename: "Взрывная информация по ютубу" })
                 this.bot.sendMessage(user.tg_id, step.message, { parseMode: "markdown" })
                 return this.bot.sendDocument(user.tg_id, path.resolve(__dirname, "../../../public", step.attach_file))
             default:

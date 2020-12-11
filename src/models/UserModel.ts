@@ -2,7 +2,7 @@ import { getModelForClass, prop, Ref } from "@typegoose/typegoose"
 import { Step } from "./StepModel";
 
 export class User {
-    @prop({ required: true })
+    @prop({ required: true, unique: true })
     public tg_id!: string;
 
     @prop({ ref: () => Step })
