@@ -30,6 +30,9 @@ export default class TelegramBot {
         this.bot.on(['/start'], async (msg) => {
             try {
                 const step = await StepModel.findById(process.env.STEP_ID)
+                const _user = await UserModel.findOne({ tg_id: msg.from.id })
+                if(_user)
+                    return
                 const user = new UserModel({
                     tg_id: msg.from.id,
                     step: process.env.STEP_ID
