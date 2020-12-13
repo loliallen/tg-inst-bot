@@ -11,6 +11,7 @@ services:
 
   mongo:
     image: mongo:latest
+    command: [--auth]
     volumes: 
       - mongo_volume:/data/db
     restart: always
