@@ -24,7 +24,7 @@ export default class TelegramBot {
         this.start()
         this.instLoginStep()
         this.bot.start()
-        console.log('[Telegram bot]: Started...')
+        console.log('[Telegram bot]: ✅ Started')
     }
     private start() {
         this.bot.on(['/start'], async (msg) => {

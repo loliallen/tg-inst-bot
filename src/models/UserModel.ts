@@ -13,6 +13,9 @@ export class User {
 
     @prop({ required: false })
     public inst_login?: string;
+
+    @prop({ required: false, default: Date.now() })
+    public creted_at?: Date;
 }
 
 const UserModel = getModelForClass(User)

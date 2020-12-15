@@ -28,11 +28,12 @@ export default class InstagramBot {
     }
 
     async login() {
-        console.log("[Instagram Bot]: Login...")
+        console.log("[Instagram Bot]: ⌛Login...")
         this.ig.state.generateDevice(this.user);
         await this.ig.simulate.preLoginFlow();
         const loggedInAccount = await this.ig.account.login(this.user, this.password);
         this.id = loggedInAccount.pk
         await this.ig.simulate.postLoginFlow();
+        console.log("[Instagram Bot]: ✅ Logged")
     }
 }

@@ -14,5 +14,5 @@ app.listen(port, ()=>{
     iBot.run()
     const tBot = new TelegramBot(iBot)
     tBot.run()
-    console.log(`Server listening on http://localhost:${port}`)
+    console.log(`[Server]: ✅ Listening on http://localhost:${port}`)
 })
