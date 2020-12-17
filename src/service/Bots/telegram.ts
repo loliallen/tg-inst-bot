@@ -66,7 +66,7 @@ export default class TelegramBot {
                 // приходит логин от инсты
                 if (!user.inst_login) {
                     // проверка подписки
-                    this.bot.sendMessage(msg.from.id, "Проверка займет максимум минутку\nОжидайте ⌛...", { parseMode: "markdown" })
+                    this.bot.sendMessage(msg.from.id, "Проверка займет максимум минутку\nОжидайте... ⌛", { parseMode: "markdown" })
                     const index = await this.iBot.isFollowed(msg.text.toLowerCase())
                     if (index && isDocument(user.step)) {
                         await user.updateOne({ $set: { inst_login: msg.text, step: user.step.next } })
