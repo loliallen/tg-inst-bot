@@ -61,13 +61,14 @@ export default class TelegramBot {
                     }
                 })
                 if (!user) {
-                    return this.bot.sendMessage(msg.from.id, "Опа, адажи-", { parseMode: "markdown" })
+                    return this.bot.sendMessage(msg.from.id, "Используй комманду /start", { parseMode: "markdown" })
                 }
                 // приходит логин от инсты
                 if (!user.inst_login) {
                     // проверка подписки
-                    const index = await this.iBot.isFollowed(msg.text)
-                    if (index > -1 && isDocument(user.step)) {
+                    this.bot.sendMessage(msg.from.id, "Проверка займет максимум минутку\nОжидайте ⌛...", { parseMode: "markdown" })
+                    const index = await this.iBot.isFollowed(msg.text.toLowerCase())
+                    if (index && isDocument(user.step)) {
                         await user.updateOne({ $set: { inst_login: msg.text, step: user.step.next } })
                         const nextStep = user.step.next
                         if (isDocument(nextStep))

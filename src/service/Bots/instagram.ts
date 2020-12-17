@@ -12,17 +12,25 @@ export default class InstagramBot {
         this.password = process.env.PASSWORD || "";
         this.ig = new IgApiClient();
     }
-    async run(){
+    async run() {
         await this.login()
     }
 
-    async isFollowed(account_name:string){
+    async isFollowed(account_name: string) {
         try {
-            const followers = await this.ig.feed.accountFollowers(4557096531).items()
-            const account = followers.findIndex(e => e.username === account_name)
-            return account
+            // 4557096531
+            var subs = false
+            const id = await this.ig.user.getIdByUsername("thatsnoisy")
+            const followers = await this.ig.feed.accountFollowers(id)
+            await followers.items$.forEach(e => e.forEach(f => {
+                if (f.username === account_name) {
+                    subs = true
+                }
+            }))
+            return subs
         } catch (error) {
-            return -1
+            console.error(error)
+            return false
         }
     }
 
