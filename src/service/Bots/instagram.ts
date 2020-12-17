@@ -18,9 +18,8 @@ export default class InstagramBot {
 
     async isFollowed(account_name:string){
         try {
-            const id = await this.ig.user.getIdByUsername(account_name)
-            const followers = await this.ig.feed.accountFollowing(id).items()
-            const account = followers.findIndex(e => e.pk === 4557096531)
+            const followers = await this.ig.feed.accountFollowers(4557096531).items()
+            const account = followers.findIndex(e => e.username === account_name)
             return account
         } catch (error) {
             return -1
