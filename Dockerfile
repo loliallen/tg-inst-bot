@@ -1,15 +1,13 @@
-FROM node:12.15.0
+FROM node:12.15.0-alpine
+
+EXPOSE 7080
 
 WORKDIR /usr/server
-
 COPY package.json ./
 
-RUN npm install
-RUN npm install -g tsc
+RUN npm install && npm install -g tsc
 
 COPY . .
 RUN npm run build
-
-EXPOSE 7080
 
 CMD [ "npm", "start" ]

@@ -1,7 +1,7 @@
 import { IgApiClient } from "instagram-private-api"
-import { config } from "dotenv"
 import path from "path"
 import fs from "fs"
+import config from "../../config";
 
 export default class InstagramBot {
     igs: Array<IgApiClient>;
@@ -11,12 +11,12 @@ export default class InstagramBot {
     passwords: Array<string>;
     uses: number = 0;
     requests: number = 0;
-    noisyPk: number = 4557096531;
+    noisyPk: string = config.instagram.username;
 
     constructor() {
-        config()
-        this.users = [process.env.USER2 || "", process.env.USER3 || ""];
-        this.passwords = [process.env.PASSWORD2 || "", process.env.PASSWORD3 || ""];
+        // config()
+        this.users = config.instagram.accounts.map(a => a.username || "");
+        this.passwords = config.instagram.accounts.map(a => a.password || "");
         this.igs = [new IgApiClient(),new IgApiClient()];
     }
     async run() {
@@ -29,11 +29,10 @@ export default class InstagramBot {
     }
 
     async isFollowed(account_name: string) {
-        
-        console.log(account_name)
         var subs = false
         // check is need to switch
         this.swichIg()
+
         // incr request actions
         this.requests += 1;
         
@@ -55,7 +54,7 @@ export default class InstagramBot {
                 console.log('Searching in following')
                 const following = this.ig.feed.accountFollowing(user.pk)
                 await following.items$.forEach(e => e.forEach(f => {
-                    if (f.pk === this.noisyPk) {
+                    if (f.username === this.noisyPk) {
                         subs = true
                     }
                 }))

@@ -1,12 +1,11 @@
 import mongoose from "mongoose"
-import { config } from "dotenv"
+import config from "../../config"
 
 export default () => {
     try {
         console.log("[Database]: ⌛ Connecting...")
 
-        config()
-        const DB_URI: string = process.env.MONGODB_URI || ""
+        const DB_URI: string = config.app.database.url || ""
         const CONNECT_OPTIONS = {
             useNewUrlParser: true,
             useUnifiedTopology: true,

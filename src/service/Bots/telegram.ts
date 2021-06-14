@@ -4,7 +4,8 @@ import InstagramBot from "./instagram";
 import { isDocument } from "@typegoose/typegoose"
 import StepModel, { Step } from "../../models/StepModel";
 import path from "path"
-import fs from "fs"
+import config from "../../config";
+
 
 export default class TelegramBot {
     bot: Telebot;
@@ -12,7 +13,7 @@ export default class TelegramBot {
     token: string;
 
     constructor(iBot: InstagramBot) {
-        this.token = process.env.TELEGRAM_BOT_TOKEN || "";
+        this.token = config.telegram.token || "";
         this.bot = new Telebot({
             token: this.token,
             usePlugins: ['askUser', 'ignoreMessagesBeforeStart']
@@ -29,13 +30,13 @@ export default class TelegramBot {
     private start() {
         this.bot.on(['/start'], async (msg) => {
             try {
-                const step = await StepModel.findById(process.env.STEP_ID)
+                const step = await StepModel.findById(config.app.firstStepId)
                 const _user = await UserModel.findOne({ tg_id: msg.from.id })
                 if(_user)
                     return
                 const user = new UserModel({
                     tg_id: msg.from.id,
-                    step: process.env.STEP_ID
+                    step: config.app.firstStepId
                 })
                 if (step) {
                     this.sendStep(user, step)
@@ -63,6 +64,7 @@ export default class TelegramBot {
                 if (!user) {
                     return this.bot.sendMessage(msg.from.id, "Используй комманду /start", { parseMode: "markdown" })
                 }
+
                 // приходит логин от инсты
                 if (!user.inst_login) {
                     // проверка подписки

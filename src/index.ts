@@ -4,8 +4,9 @@ import BodyParser from "body-parser"
 import InstagramBot from "./service/Bots/instagram"
 import TelegramBot from "./service/Bots/telegram"
 import DataBase from "./service/database"
+import config from "./config"
 
-const port = process.env.PORT || 7080
+const port = config.app.port
 
 const app = express()
 

@@ -1,8 +1,9 @@
 version: "3"
 
 services:
-  bot:
+  bot-1:
     image: noisy-bot
+    container_name: instagram-telegram-bot
     build: ./
     depends_on:
       - mongo
@@ -15,8 +16,6 @@ services:
     volumes: 
       - mongo_volume:/data/db
     restart: always
-    ports: 
-      - 27017:27017
 
 networks:
   bot-app:
