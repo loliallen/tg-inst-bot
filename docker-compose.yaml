@@ -3,12 +3,24 @@ version: "3"
 services:
   bot-1:
     image: noisy-bot
-    container_name: instagram-telegram-bot
+    container_name: instagram-telegram-bot-1
     build: ./
     depends_on:
       - mongo
     env_file: 
-      - .env
+      - .env.bot1
+    volumes: 
+      - instagram_sessions:/usr/server/instagram_sessions
+  bot-2:
+    image: noisy-bot
+    container_name: instagram-telegram-bot-1
+    build: ./
+    depends_on:
+      - mongo
+    env_file: 
+      - .env.bot2
+    volumes: 
+      - instagram_sessions:/usr/server/instagram_sessions
 
   mongo:
     image: mongo:latest
@@ -16,6 +28,8 @@ services:
     volumes: 
       - mongo_volume:/data/db
     restart: always
+    ports: 
+      - 27030:27017
 
 networks:
   bot-app:
@@ -23,4 +37,6 @@ networks:
 
 
 volumes: 
+  instagram_sessions:
   mongo_volume:
+  

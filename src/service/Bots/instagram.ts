@@ -97,11 +97,11 @@ export default class InstagramBot {
         }
     }
     async checkSession(username:string, password: string){
-        const _path = path.resolve(__dirname, `${username}.json`)
-        const _path_cookie = path.resolve(__dirname, `${username}.cookie.json`)
+        const _path = path.resolve(__dirname, `../../../instagram_sessions/${username}.json`)
+        const _path_cookie = path.resolve(__dirname, `../../../instagram_sessions/${username}.cookie.json`)
  
         if(fs.existsSync(_path) && fs.existsSync(_path_cookie)){
-            console.log("Reading session file")
+            console.log("Reading session file", _path)
             var state = fs.readFileSync(_path).toJSON().data
             var cookies = fs.readFileSync(_path_cookie).toString()
             await this.ig?.state.deserialize(state)
@@ -117,8 +117,8 @@ export default class InstagramBot {
         }
     }
     async saveSession(username:string){
-        const _path = path.resolve(__dirname, `${username}.json`)
-        const _path_cookie = path.resolve(__dirname, `${username}.cookie.json`)
+        const _path = path.resolve(__dirname, `../../../instagram_sessions/${username}.json`)
+        const _path_cookie = path.resolve(__dirname, `../../../instagram_sessions/${username}.cookie.json`)
         var cookie = await this.ig?.state.serializeCookieJar()
         var value = await this.ig?.state.serialize()
         fs.writeFileSync(_path, JSON.stringify(value))
