@@ -13,7 +13,7 @@ services:
       - instagram_sessions:/usr/server/instagram_sessions
   bot-2:
     image: noisy-bot
-    container_name: instagram-telegram-bot-1
+    container_name: instagram-telegram-bot-2
     build: ./
     depends_on:
       - mongo

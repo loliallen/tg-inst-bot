@@ -2,6 +2,7 @@ import { config } from "dotenv"
 config()
 
 const USERNAME = process.env.ACCOUNT_NAME;
+const USER_PK = process.env.USER_PK;
 const accounts = [
     {
         username: process.env.USER2,
@@ -16,7 +17,8 @@ const accounts = [
 
 const INSTAGRAM = {
     accounts,
-    username: USERNAME || ""
+    username: USERNAME || "",
+    user_pk: Number(USER_PK || null) 
 }
 
 const TELEGRAM = {

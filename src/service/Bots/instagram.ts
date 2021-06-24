@@ -11,7 +11,8 @@ export default class InstagramBot {
     passwords: Array<string>;
     uses: number = 0;
     requests: number = 0;
-    noisyPk: string = config.instagram.username;
+    user_name: string = config.instagram.username;
+    user_pk: number = config.instagram.user_pk;
 
     constructor() {
         // config()
@@ -42,19 +43,19 @@ export default class InstagramBot {
             // get user
             const user = await this.ig.user.searchExact(account_name)
             if(user.is_private){
-                console.log('Searching in followers')
-                const followers = this.ig.feed.accountFollowers(this.noisyPk)
+                console.log(`[${user.username}] Searching in followers`)
+                const followers = this.ig.feed.accountFollowers(this.user_pk)
                 await followers.items$.forEach(e => e.forEach(f => {
                     if (f.pk === user.pk) {
                         subs = true
                     }
                 }))
                 return subs
-            }else {
-                console.log('Searching in following')
+            } else {
+                console.log(`[${user.username}] Searching in following`)
                 const following = this.ig.feed.accountFollowing(user.pk)
                 await following.items$.forEach(e => e.forEach(f => {
-                    if (f.username === this.noisyPk) {
+                    if (f.username === this.user_name) {
                         subs = true
                     }
                 }))
