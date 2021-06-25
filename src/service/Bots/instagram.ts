@@ -3,6 +3,8 @@ import path from "path"
 import fs from "fs"
 import config from "../../config";
 
+const MAX_REQUESTS = 4
+
 export default class InstagramBot {
     igs: Array<IgApiClient>;
     ig: IgApiClient | undefined;
@@ -14,7 +16,6 @@ export default class InstagramBot {
     user_pk: number = config.instagram.user_pk;
 
     constructor() {
-        // config()
         this.accounts = config.instagram.accounts
         this.igs = [];
     }
@@ -48,6 +49,7 @@ export default class InstagramBot {
             // get user
             const user = await this.ig.user.searchExact(account_name)
             if(user.is_private){
+                this.requests += 2;
                 console.log(`[${user.username}] Searching in followers`)
                 const followers = this.ig.feed.accountFollowers(this.user_pk)
                 await followers.items$.forEach(e => e.forEach(f => {
@@ -74,9 +76,9 @@ export default class InstagramBot {
     }
 
     swichIg(){
-        if(this.requests % 4 === 0 && this.requests !== 0){
+        if(this.requests % MAX_REQUESTS === 0 && this.requests !== 0){
             this.uses += 1;
-            this.ig = this.igs[this.uses % 2]
+            this.ig = this.igs[this.uses % this.accounts.length]
         }
     }
 
