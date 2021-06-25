@@ -10,7 +10,7 @@ services:
     env_file: 
       - .env.bot1
     volumes: 
-      - instagram_sessions:/usr/server/instagram_sessions
+      - ./instagram_sessions:/usr/server/instagram_sessions
   bot-2:
     image: noisy-bot
     container_name: instagram-telegram-bot-2
@@ -20,7 +20,7 @@ services:
     env_file: 
       - .env.bot2
     volumes: 
-      - instagram_sessions:/usr/server/instagram_sessions
+      - ./instagram_sessions:/usr/server/instagram_sessions
 
   mongo:
     image: mongo:latest
@@ -35,7 +35,6 @@ networks:
     driver: bridge
 
 
-volumes: 
-  instagram_sessions:
+volumes:
   mongo_volume:
   

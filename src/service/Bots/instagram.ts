@@ -7,8 +7,7 @@ export default class InstagramBot {
     igs: Array<IgApiClient>;
     ig: IgApiClient | undefined;
     ids: Array<number> = [];
-    users: Array<string>;
-    passwords: Array<string>;
+    accounts: Array<{ username: any; password: any; }>;
     uses: number = 0;
     requests: number = 0;
     user_name: string = config.instagram.username;
@@ -16,16 +15,22 @@ export default class InstagramBot {
 
     constructor() {
         // config()
-        this.users = config.instagram.accounts.map(a => a.username || "");
-        this.passwords = config.instagram.accounts.map(a => a.password || "");
-        this.igs = [new IgApiClient(),new IgApiClient()];
+        this.accounts = config.instagram.accounts
+        this.igs = [];
     }
     async run() {
-        for( let i = 0; i < this.users.length; i++){
-            const uname = this.users[i]
-            const upass = this.passwords[i]
-            this.ig = this.igs[i]
-            await this.login(uname, upass)
+        try {
+            for( let account of this.accounts){
+                const uname = account.username
+                const upass = account.password
+                console.log(`[Instagram Bot]: ⌛Login in ${uname}[${upass}]...`)
+                this.ig = new IgApiClient()
+                this.igs.push(this.ig)
+                await this.login(uname, upass)
+                console.log(`[Instagram Bot]: ✅ Logged in ${uname}`)
+            }
+        } catch (e) {
+            console.error(e)
         }
     }
 
@@ -80,20 +85,25 @@ export default class InstagramBot {
             if(!this.ig)
                 throw new Error("[Instagram Bot]: Ig is undefined")
 
-            console.log(`[Instagram Bot]: ⌛Login in ${username}...`)
             this.ig.state.generateDevice(username);
             
             await this.ig.simulate.preLoginFlow();
             
             await this.checkSession(username, password)
             
-            process.nextTick(async () => await this.ig?.simulate.postLoginFlow());
             
+            process.nextTick(async () => {
+                try {
+                    await this.ig?.simulate.postLoginFlow()
+                } catch (error) {
+                    console.error("[Instagram Bot]: Login error: ",error)
+                    return;
+                }
+            });
             await this.ig.state.serialize()
             
-            console.log(`[Instagram Bot]: ✅ Logged in ${username}`)
         } catch (error) {
-            console.error(error)
+            console.error("[Instagram Bot]: Login error: ",error)
             return;
         }
     }

@@ -16,7 +16,7 @@ DataBase()
 
 app.listen(port, ()=>{
     const iBot = new InstagramBot()
-    iBot.run()
+    iBot.run().catch(e => console.error(e))
     const tBot = new TelegramBot(iBot)
     tBot.run()
     console.log(`[Server]: ✅ Listening on http://localhost:${port}`)

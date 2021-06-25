@@ -3,17 +3,16 @@ config()
 
 const USERNAME = process.env.ACCOUNT_NAME;
 const USER_PK = process.env.USER_PK;
-const accounts = [
-    {
-        username: process.env.USER2,
-        password: process.env.PASS2,
-    },
-    {
-        username: process.env.USER3,
-        password: process.env.PASS3,
-    }
-]
 
+const USERS = process.env.USERS
+const PASSS = process.env.PASSS
+
+if (!USERS || !PASSS)
+    throw new Error("Config error, usernames or passwords isn't passed")
+const accounts = USERS.split(" ").map((u, i) => ({
+    username: u,
+    password: PASSS.split(" ")[i],
+}))
 
 const INSTAGRAM = {
     accounts,
@@ -33,12 +32,9 @@ const APP = {
     }
 }
 
-if (!APP.firstStepId || !accounts[0].username || !accounts[1].username) {
+if (!APP.firstStepId) {
     throw new Error("Config error, please check env varibles")
 }
-console.log("APP", APP)
-console.log("INSTAGRAM", INSTAGRAM)
-console.log("TELEGRAM", TELEGRAM)
 export default {
     app: APP,
     instagram: INSTAGRAM,
