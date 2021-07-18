@@ -9,7 +9,7 @@ export class Step {
     public attach_type!: string;
     @prop({ required: false })
     public attach_file!: string;
-    @prop({ autopopulate: true, required: false, ref: () => Step })
+    @prop({ autopopulate: true, required: false, ref: Step })
     public next!: Ref<Step>;
 }
 const StepModel = getModelForClass(Step)
