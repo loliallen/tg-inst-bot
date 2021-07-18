@@ -28,7 +28,9 @@ export default class TelegramBot {
   private start() {
     this.bot.on(["/start"], async (msg) => {
       try {
-        const step = await StepModel.findById(config.app.firstStepId).populate("next");
+        const step = await StepModel.findById(config.app.firstStepId).populate(
+          "next"
+        );
         const _user = await UserModel.findOne({ tg_id: msg.from.id });
 
         if (_user && _user.inst_login && isDocument(step?.next))
@@ -39,12 +41,6 @@ export default class TelegramBot {
               parseMode: "markdown",
             }
           );
-
-        if (!_user?.tg_id) {
-          return this.bot.sendMessage(msg.from.id, "Введи", {
-            parseMode: "markdown",
-          });
-        }
 
         const user = new UserModel({
           tg_id: msg.from.id,
