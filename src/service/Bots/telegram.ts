@@ -30,8 +30,22 @@ export default class TelegramBot {
       try {
         const step = await StepModel.findById(config.app.firstStepId);
         const _user = await UserModel.findOne({ tg_id: msg.from.id });
-        console.log(_user);
-        if (_user) return;
+
+        if (_user && _user.inst_login)
+          return this.bot.sendMessage(
+            msg.from.id,
+            `Ты уже получил свой чеклист (@${_user.inst_login})\n+${step?.message}`,
+            {
+              parseMode: "markdown",
+            }
+          );
+
+        if (!_user?.tg_id) {
+          return this.bot.sendMessage(msg.from.id, "Введи", {
+            parseMode: "markdown",
+          });
+        }
+
         const user = new UserModel({
           tg_id: msg.from.id,
           step: config.app.firstStepId,
