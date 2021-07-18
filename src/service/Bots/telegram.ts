@@ -28,13 +28,13 @@ export default class TelegramBot {
   private start() {
     this.bot.on(["/start"], async (msg) => {
       try {
-        const step = await StepModel.findById(config.app.firstStepId);
+        const step = await StepModel.findById(config.app.firstStepId).populate("next");
         const _user = await UserModel.findOne({ tg_id: msg.from.id });
 
-        if (_user && _user.inst_login)
+        if (_user && _user.inst_login && isDocument(step?.next))
           return this.bot.sendMessage(
             msg.from.id,
-            `Ты уже получил свой чеклист (@${_user.inst_login})\n+${step?.message}`,
+            `Ты уже получил свой чеклист (@${_user.inst_login})\n${step?.next?.message}`,
             {
               parseMode: "markdown",
             }
