@@ -44,7 +44,7 @@ export default class TelegramBot {
         else if (_user && !_user?.inst_login) {
             return this.bot.sendMessage(
                 msg.from.id,
-                `Введи свой ник без @`,
+                `Введи свой ник в инстаграме (без @)`,
                 {
                   parseMode: "markdown",
                 }
